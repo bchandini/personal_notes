@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const homeStartingContent = "Hi! This is Mary Bernard, Welcome to my Journal!";
 const aboutContent = "Hi This is Mary Bernard, I'm a software engineer by profession. This is where I document all of my life's experience. Hope it will help someone to learn from it as much as it has helped me grow";
 const contactContent = "You can drop me an email at marychandinibernard@gmail.com, would love to hear from you";
-
+const errorContent = "Username or Paswword is Incorrect";
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -88,7 +88,12 @@ app.post("/login", function(req, res){
         if(foundUser){
             if(foundUser.password === password){
               res.redirect("/home");              
+            }else{
+              res.redirect("/error");
             }
+        }else{
+            res.redirect("/error");
+          
         }
     }
  })
@@ -134,6 +139,9 @@ app.get("/contact", function(req, res){
   res.render("contact", {contactContent: contactContent});
 });
 
+app.get("/error", function(req, res){
+  res.render("error", {errorContent: errorContent});
+});
 
 app.listen(process.env.PORT || 3000, function() {
   console.log("Server started on port 3000");
