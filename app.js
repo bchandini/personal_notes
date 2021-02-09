@@ -7,7 +7,7 @@ const ejs = require("ejs");
 const mongoose = require('mongoose');
 const homeStartingContent = "Hi! This is Mary Bernard, Welcome to my Journal!";
 const aboutContent = "Hi! This is Mary Bernard, I would like to share a bit of my story with you.";
-const contactContent = "You can drop me an email at marychandinibernard@gmail.com, would love to hear from you";
+const contactContent = "You can drop me an Email ";
 const errorContent = "Username or Paswword is Incorrect";
 const thankyouContent = "Will share a new Post that answers your Query. Please visit back in a week.";
 const app = express();
@@ -30,7 +30,7 @@ const userSchema = {
 };
 
 const querySchema = {
-  heading: String,
+  userid: String,
   query: String,
 };
 
@@ -38,7 +38,7 @@ const User = mongoose.model("User", userSchema);
 
 const Post = mongoose.model("Post", postSchema);
 
-const Query = mongoose.model("Query", querySchema);
+const Query =  mongoose.model("Query", querySchema);
 
 app.get("/", function(req, res){
   res.render("main");
@@ -117,11 +117,11 @@ app.get("/question", function(req, res){
 });
 
 app.post("/question", function(req, res){
-  const query = new Query({
-    heading: req.body.postHeading,
-    query: req.body.postQuestion
+    const query = new Query({
+      userid: req.body.postHeading,
+      query: req.body.postQuestion,
   });
-
+  
   query.save(function(err){
     if (!err){
         res.redirect("/thankyou");
