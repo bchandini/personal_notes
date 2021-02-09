@@ -6,9 +6,10 @@ const _ = require("lodash");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
 const homeStartingContent = "Hi! This is Mary Bernard, Welcome to my Journal!";
-const aboutContent = "Hi This is Mary Bernard, I'm a software engineer by profession. This is where I document all of my life's experience. Hope it will help someone to learn from it as much as it has helped me grow";
+const aboutContent = "Hi! This is Mary Bernard, I would like to share a bit of my story with you.";
 const contactContent = "You can drop me an email at marychandinibernard@gmail.com, would love to hear from you";
 const errorContent = "Username or Paswword is Incorrect";
+const thankyouContent = "Will share a new Post that answers your Query. Please visit back in a week.";
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -28,9 +29,16 @@ const userSchema = {
   password: String
 };
 
+const querySchema = {
+  heading: String,
+  query: String,
+};
+
 const User = mongoose.model("User", userSchema);
 
 const Post = mongoose.model("Post", postSchema);
+
+const Query = mongoose.model("Query", querySchema);
 
 app.get("/", function(req, res){
   res.render("main");
@@ -104,16 +112,32 @@ app.get("/compose", function(req, res){
   res.render("compose");
 });
 
+app.get("/question", function(req, res){
+  res.render("question");
+});
+
+app.post("/question", function(req, res){
+  const query = new Query({
+    heading: req.body.postHeading,
+    query: req.body.postQuestion
+  });
+
+  query.save(function(err){
+    if (!err){
+        res.redirect("/thankyou");
+    }
+  });
+});
+
 app.post("/compose", function(req, res){
   const post = new Post({
     title: req.body.postTitle,
     content: req.body.postBody
   });
 
-
   post.save(function(err){
     if (!err){
-        res.redirect("/");
+        res.redirect("/home");
     }
   });
 });
@@ -142,6 +166,11 @@ app.get("/contact", function(req, res){
 app.get("/error", function(req, res){
   res.render("error", {errorContent: errorContent});
 });
+
+app.get("/thankyou", function(req, res){
+  res.render("thankyou", {thankyouContent: thankyouContent});
+});
+
 
 app.listen(process.env.PORT || 3000, function() {
   console.log("Server started on port 3000");
