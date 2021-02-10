@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const _ = require("lodash");
 const ejs = require("ejs");
 const mongoose = require('mongoose');
+const encrypt = require('mongoose-encryption');
 const homeStartingContent = "Hi! This is Mary Bernard, Welcome to my Journal!";
 const aboutContent = "Hi! This is Mary Bernard, I would like to share a bit of my story with you.";
 const contactContent = "You can drop me an Email ";
@@ -24,15 +25,18 @@ const postSchema = {
   content: String,
 };
 
-const userSchema = {
+const userSchema =new mongoose.Schema({
   email: String,
   password: String
-};
+});
 
 const querySchema = {
   userid: String,
   query: String,
 };
+
+var secret = "Thisisthesecretstring";
+userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"] });
 
 const User = mongoose.model("User", userSchema);
 
