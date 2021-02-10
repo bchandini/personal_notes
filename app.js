@@ -64,9 +64,9 @@ app.get("/home", function(req, res){
       posts: posts
       });
 });
+});
 
 app.post("/register", function(req, res){
-
  const newUser = new User({
     email: req.body.username,
     password: req.body.password
@@ -80,7 +80,6 @@ app.post("/register", function(req, res){
     })
  })
 
-});
 
 app.post("/login", function(req, res){
 
