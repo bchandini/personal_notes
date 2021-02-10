@@ -9,7 +9,7 @@ const homeStartingContent = "Hi! This is Mary Bernard, Welcome to my Journal!";
 const aboutContent = "Hi! This is Mary Bernard, I would like to share a bit of my story with you.";
 const contactContent = "You can drop me an Email ";
 const errorContent = "Username or Paswword is Incorrect";
-const thankyouContent = "Will share a new Post that answers your Query. Please visit back in a week.";
+const thankyouContent = "Will get back to you shortly   on the query";
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 mongoose.connect("mongodb+srv://admin-user:Corp2020$@realmcluster.r5zwp.mongodb.net/blogger?retryWrites=true&w=majority", {useNewUrlParser: true});
-
+let emailuser= "";
 const postSchema = {
   title: String,
   content: String,
@@ -71,15 +71,40 @@ app.post("/register", function(req, res){
     email: req.body.username,
     password: req.body.password
  });
- newUser.save(function(err){
-     if(err){
-         console.log(err);
-     }else{
-      res.redirect("/home");
+ 
+ User.findOne({email: req.body.username}, function(err, foundUser){
+  if(err)
+  {
+    console.log(err);
+  }else{
+        if(foundUser){
+          if(foundUser.password === req.body.password){
+            emailuser = req.body.username;
+            res.redirect("/home");              
+          }else{
+            newUser.save(function(err){
+            if(err){
+                console.log(err);
+            }else{
+              emailuser = req.body.username;
+              res.redirect("/home");
+            }
+          });
+        }            
+       }
+       else {
+        newUser.save(function(err){
+          if(err){
+              console.log(err);
+          }else{
+           emailuser = req.body.username;
+           res.redirect("/home");
+          }
+        });
       }
-    })
- })
-
+    }
+  })
+});
 
 app.post("/login", function(req, res){
 
@@ -94,6 +119,7 @@ app.post("/login", function(req, res){
     }else{
         if(foundUser){
             if(foundUser.password === password){
+              emailuser = req.body.username;
               res.redirect("/home");              
             }else{
               res.redirect("/error");
@@ -117,7 +143,7 @@ app.get("/question", function(req, res){
 
 app.post("/question", function(req, res){
     const query = new Query({
-      userid: req.body.postHeading,
+      userid: emailuser,
       query: req.body.postQuestion,
   });
   
