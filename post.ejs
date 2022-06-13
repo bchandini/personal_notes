@@ -1,0 +1,20 @@
+
+<%- include("partials/header"); -%>
+<img src="https://i.ibb.co/hZ2Y5Kr/Capture2.png" class="img-responsive" style="width:10%;min-width: 10px;" alt="Capture" border="0">
+<hr class="center">
+<h1 class="display-2">Notes</h1>
+<hr class="center">
+<% for(i=0;i< userpost.length; i++){ %>
+<h1 class="display-4">
+    <%= userdate[i] %>
+</h1>
+<p>
+    <%=userpost[i].substring(0, 50) + " ..."%>
+    <a href="/posts/<%=userpostid[i]%>">Read More</a>
+</p>
+ <% } %> 
+       
+<a class="btn btn-light btn-lg" href="/notes" role="button">Back</a>
+<a class="btn btn-light btn-lg" href="/logout" role="button">Log Out</a>
+    
+<%- include("partials/footer"); -%>

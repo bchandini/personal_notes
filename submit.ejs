@@ -1,0 +1,20 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    
+  <div class="jumbotron centered">
+    <img src="https://i.ibb.co/hZ2Y5Kr/Capture2.png" class="center img-responsive" alt="Capture" border="0">
+  
+    <h1 class="display-4">Keep track of your day to day events!</h1>
+    <form action="/submit" method="POST">
+
+      <div class="form-group">
+        <textarea class="form-control" rows="5" cols="30" type="text" name="secret" placeholder="Write Here" autocomplete="off"></textarea>
+      </div>
+      <button type="submit" class="btn btn-dark">Submit</button>
+    </form>
+
+
+  </div>
+</div>
+<%- include('partials/footer') %>
